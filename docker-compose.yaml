@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: somepassword
+      POSTGRES_DB: postgres
+    user: postgres
+    healthcheck:
+      test: "pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER"
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  web:
+    build:
+      context: .
+      target: development
+    environment:
+      DATABASE_URL: postgres://postgres:somepassword@db:5432/postgres
+    volumes:
+      - .:/app
+      - /app/.venv
+    ports:
+      - 8000:8000
+    depends_on:
+      db:
+        condition: service_healthy

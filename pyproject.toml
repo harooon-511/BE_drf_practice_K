@@ -1,0 +1,36 @@
+[tool.black]
+line-length = 100
+
+[tool.isort]
+known_django = ["django", "rest_framework"]
+line_length = 100
+profile = "black"
+sections = "FUTURE,STDLIB,DJANGO,THIRDPARTY,FIRSTPARTY,LOCALFOLDER"
+
+[tool.poetry]
+name = "practice-k"
+version = "0.1.0"
+description = ""
+authors = ["DeMiA inc."]
+readme = "README.md"
+packages = [{include = "practice_k"}]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+django-cors-headers = "^3.13.0"
+djangorestframework = "^3.13.1"
+dj-database-url = "^1.0.0"
+Django = "^4.1.1"
+python-dotenv = "^0.21.0"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.8.0"
+flake8 = "^5.0.4"
+isort = "^5.10.1"
+pre-commit = "^2.20.0"
+toml-sort = "^0.20.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
