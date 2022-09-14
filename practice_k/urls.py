@@ -18,12 +18,8 @@ router.register('friendlists', app_k_api_views.FriendlistViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('home/', HomeView.as_view(), name="home"),
-    path('login/', MyLoginView.as_view(), name="login"),
-    path('logout/', MyLogoutView.as_view(), name="logout"),
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    path('api/', include(router.urls)),
     path('api/auth/', include('djoser.urls.jwt')),
+    path('api/', include(router.urls)),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
