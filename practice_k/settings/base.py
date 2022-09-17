@@ -16,7 +16,12 @@ SECRET_KEY = os.getenv(
 
 DEBUG = strtobool(os.getenv("DEBUG", "n"))
 
-ALLOWED_HOSTS = [s.strip() for s in os.getenv("ALLOWED_HOSTS", "").split(",") if s]
+
+
+# ALLOWED_HOSTS = [s.strip() for s in os.getenv("ALLOWED_HOSTS", "").split(",") if s]
+# IOS実機限定やから後で修正しなあかん
+# ALLOWED_HOSTS = ['192.168.1.203']
+ALLOWED_HOSTS = ['192.168.13.5','127.0.0.1']
 
 CORS_ALLOWED_ORIGINS = [s.strip() for s in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",") if s]
 
@@ -79,6 +84,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = "practice_k.urls"
@@ -130,7 +136,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "ja"
 
 TIME_ZONE = 'Asia/Tokyo'
 

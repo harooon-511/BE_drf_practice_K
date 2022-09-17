@@ -16,7 +16,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class CustomUserSerializer(serializers.ModelSerializer):
   class Meta:
     model = CustomUser
-    fields = ('email', 'password', 'nickname', 'username', 'date_joined', 'is_staff', 'is_admin')
+    fields = ('id','email', 'password', 'nickname', 'username', 'date_joined', 'is_staff', 'is_admin')
 
     def create(self, validated_data):
       validated_data['password'] = make_password(validated_data.get('password'))
@@ -25,7 +25,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
   class Meta:
     model = Post
-    fields = ('created_by', 'content', 'created_at')
+    fields = ('id','created_by', 'content', 'created_at')
 
 
 class NotificationSerializer(serializers.ModelSerializer):
@@ -36,4 +36,4 @@ class NotificationSerializer(serializers.ModelSerializer):
 class FriendlistSerializer(serializers.ModelSerializer):
   class Meta:
     model = Friendlist
-    fields = ('reader', 'receiver', 'read_at')
+    fields = ('id','reader', 'receiver', 'read_at')

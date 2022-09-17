@@ -1,17 +1,19 @@
 from django.db import models
+import uuid
 
 # Create your models here.
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
 from django.utils import timezone
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
-from django.db import models
 
 from django.core.validators import MinLengthValidator, RegexValidator
 
 class MyUserManager(BaseUserManager):
-    def create_user(self, username, nickname, email, password=None):
+    def create_user(self, username:str, nickname:str, email:str, password:str)-> 'CustomUser':
         if not username:
             raise ValueError('Users must have an username')
         if not email:
@@ -24,9 +26,10 @@ class MyUserManager(BaseUserManager):
         )
         user.set_password(password)
         user.save(using=self._db)
+        # Token.objects.create(user=user)
         return user
 
-    def create_superuser(self, username, email, nickname, password):
+    def create_superuser(self, username:str, email:str, nickname:str, password:str) -> 'CustomUser':
         user = self.create_user(
             username=username,
             email=self.normalize_email(email),
@@ -41,6 +44,7 @@ class MyUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
   email = models.EmailField(verbose_name='Email', max_length=50, unique=True)
   nickname = models.CharField(verbose_name='ニックネーム', max_length=10, default=0, null=False)
   username = models.CharField(verbose_name='username', max_length=10, unique=True, validators=[MinLengthValidator(5,), RegexValidator(r'^[a-zA-Z0-9]*$',)])
@@ -62,7 +66,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 
 class Post(models.Model):
-  created_by = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name='投稿者', on_delete=models.CASCADE, related_name='when_created_post')
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
+  created_by = models.ForeignKey(settings.AUTH_USER_MODEL,to_field='username',verbose_name='投稿者', on_delete=models.CASCADE, related_name='when_created_post')
   content = models.TextField('今何してる？', max_length=128)
   created_at = models.DateTimeField('投稿日時', auto_now_add=True) 
   
@@ -78,8 +83,9 @@ class Notification(models.Model):
     
 
 class Friendlist(models.Model):
-  reader = models.ForeignKey(settings.AUTH_USER_MODEL, default=0,verbose_name='読んだ人', on_delete=models.CASCADE,related_name='who_met_before')
-  receiver = models.ForeignKey(settings.AUTH_USER_MODEL, default=0,verbose_name='読まれた人', on_delete=models.CASCADE,related_name='receiver')
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
+  reader = models.ForeignKey(settings.AUTH_USER_MODEL, default=0,verbose_name='読んだ人', on_delete=models.CASCADE,related_name='who_met_before',to_field='username')
+  receiver = models.ForeignKey(settings.AUTH_USER_MODEL, default=0,verbose_name='読まれた人', on_delete=models.CASCADE,related_name='receiver',to_field='username')
   read_at = models.DateTimeField('友達になった日', auto_now_add=True) 
   
   class Meta:

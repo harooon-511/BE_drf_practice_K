@@ -1,6 +1,12 @@
 from django.urls import path, include
 from rest_framework import routers
 from app_k import api_views as app_k_api_views
+from rest_framework.authtoken import views
+# from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -18,7 +24,11 @@ router.register('friendlists', app_k_api_views.FriendlistViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    # api/auth/jwt/createでtoken発行できるけどいらんかも
     path('api/auth/', include('djoser.urls.jwt')),
+    # 下の二つよくわからん
+    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/', include(router.urls)),
 ]
 

@@ -30,7 +30,7 @@ class CustomUserAdmin(UserAdmin):
             },
         ),
     )
-    list_display = ("nickname", "email", "is_staff",)
+    list_display = ("id","nickname", "email", "is_staff",)
     list_filter = ("is_staff", "is_superuser","groups",)
     search_fields = ("username","email",)
     ordering = ("username",)
