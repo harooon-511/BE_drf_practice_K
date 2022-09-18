@@ -1,3 +1,4 @@
+from urllib import request
 from app_k.serializers import *
 from app_k.models import *
 from rest_framework import viewsets, filters
@@ -5,7 +6,8 @@ from .serializers import MyTokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
+import requests
    
 
 class ObtainTokenPairWithColorView(TokenObtainPairView):
@@ -75,3 +77,15 @@ class FriendlistViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id', 'read_at',)
     ordering = ('read_at',)
     permission_classes = [IsAuthenticated]
+
+class PostReceiverViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    # filter_backends = (filters.OrderingFilter,)
+    # ordering_fields = ('id', 'read_at',)
+    # ordering = ('read_at',)
+    # permission_classes = [IsAuthenticated]
+
+
+
+    

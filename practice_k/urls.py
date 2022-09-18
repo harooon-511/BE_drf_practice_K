@@ -20,15 +20,14 @@ router.register('customusers', app_k_api_views.CustomUserViewSet)
 router.register('posts', app_k_api_views.PostViewSet)
 router.register('notifications', app_k_api_views.NotificationViewSet)
 router.register('friendlists', app_k_api_views.FriendlistViewSet)
+router.register('friendlists', app_k_api_views.FriendlistViewSet)
+router.register('post_jsonreceiver', app_k_api_views.PostReceiverViewSet)
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # api/auth/jwt/createでtoken発行できるけどいらんかも
+    # api/auth/jwt/createでtoken発行できる
     path('api/auth/', include('djoser.urls.jwt')),
-    # 下の二つよくわからん
-    # path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/', include(router.urls)),
 ]
 
