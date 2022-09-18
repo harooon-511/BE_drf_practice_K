@@ -6,7 +6,7 @@ from .serializers import MyTokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 import requests
    
 
@@ -81,11 +81,12 @@ class FriendlistViewSet(viewsets.ModelViewSet):
 class PostReceiverViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    # filter_backends = (filters.OrderingFilter,)
-    # ordering_fields = ('id', 'read_at',)
-    # ordering = ('read_at',)
-    # permission_classes = [IsAuthenticated]
-
+class UserReceiverViewSet(viewsets.ModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    permission_classes = [AllowAny]
+    
+    
 
 
     

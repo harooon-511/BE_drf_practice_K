@@ -22,6 +22,7 @@ router.register('notifications', app_k_api_views.NotificationViewSet)
 router.register('friendlists', app_k_api_views.FriendlistViewSet)
 router.register('friendlists', app_k_api_views.FriendlistViewSet)
 router.register('post_jsonreceiver', app_k_api_views.PostReceiverViewSet)
+router.register('user_jsonreceiver', app_k_api_views.UserReceiverViewSet)
 
 
 urlpatterns = [
