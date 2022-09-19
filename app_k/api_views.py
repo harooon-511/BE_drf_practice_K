@@ -86,10 +86,8 @@ class PostReceiverViewSet(viewsets.ModelViewSet):
     serializer_class = PostSerializer
 
     def delete(self, request, format=None):
-        # queryset = Post.objects.all().filter(id=request.body.jsondecode)
         queryset = Post.objects.all().filter(id=json.loads(request.body)['id'])
         print(json.loads(request.body)['id'])
-        # print(json.loads(request.body))
         queryset.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
         
@@ -97,6 +95,11 @@ class UserReceiverViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [AllowAny]
+
+class FriendlistReceiverViewSet(viewsets.ModelViewSet):
+    queryset = Friendlist.objects.all()
+    serializer_class = FriendlistSerializer
+    permission_classes = [IsAuthenticated]
     
     
 
