@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 import requests
+import json
    
 
 class ObtainTokenPairWithColorView(TokenObtainPairView):
@@ -26,6 +27,8 @@ class ObtainTokenPairWithColorView(TokenObtainPairView):
             serializer.save()
             return Response(serializer.data, status= status.HTTP_201_CREATED)
         return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+
+    
 
 class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
@@ -81,6 +84,15 @@ class FriendlistViewSet(viewsets.ModelViewSet):
 class PostReceiverViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+    def delete(self, request, format=None):
+        # queryset = Post.objects.all().filter(id=request.body.jsondecode)
+        queryset = Post.objects.all().filter(id=json.loads(request.body)['id'])
+        print(json.loads(request.body)['id'])
+        # print(json.loads(request.body))
+        queryset.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        
 class UserReceiverViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer

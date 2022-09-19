@@ -70,6 +70,9 @@ class Post(models.Model):
   created_by = models.ForeignKey(settings.AUTH_USER_MODEL,to_field='username',verbose_name='投稿者', on_delete=models.CASCADE, related_name='when_created_post')
   content = models.TextField('今何してる？', max_length=128)
   created_at = models.DateTimeField('投稿日時', auto_now_add=True) 
+
+  def __str__(self):
+    return self.content
   
   class Meta:
     db_table = 'Posts'
@@ -77,7 +80,9 @@ class Post(models.Model):
 
 class Notification(models.Model):
   post = models.OneToOneField(Post, verbose_name='ポスト', default=0, on_delete=models.SET_NULL, null=True, related_name='which_post')
-  
+
+  def __str__(self):
+    return self.post
   class Meta:
     db_table = 'Notifications'
     
@@ -88,5 +93,8 @@ class Friendlist(models.Model):
   receiver = models.ForeignKey(settings.AUTH_USER_MODEL, default=0,verbose_name='読まれた人', on_delete=models.CASCADE,related_name='receiver',to_field='username')
   read_at = models.DateTimeField('友達になった日', auto_now_add=True) 
   
+  def __str__(self):
+    return f"{self.reader}&{self.receiver}"
+
   class Meta:
     db_table = 'Friendlists'
