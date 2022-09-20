@@ -52,7 +52,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
   is_staff = models.BooleanField(default=False)
   is_admin = models.BooleanField(default=False)
-
+  is_active = models.BooleanField(default=True)
+  
   objects = MyUserManager()
  
   USERNAME_FIELD = 'username'
@@ -81,8 +82,6 @@ class Post(models.Model):
 class Notification(models.Model):
   post = models.OneToOneField(Post, verbose_name='ポスト', default=0, on_delete=models.SET_NULL, null=True, related_name='which_post')
 
-  def __str__(self):
-    return self.post
   class Meta:
     db_table = 'Notifications'
     

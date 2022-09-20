@@ -16,7 +16,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 class CustomUserSerializer(serializers.ModelSerializer):
   class Meta:
     model = CustomUser
-    fields = ('id','email', 'password', 'nickname', 'username', 'date_joined', 'is_staff', 'is_admin')
+    fields = ('id','email', 'password', 'nickname', 'username', 'date_joined', 'is_staff','is_active','is_admin')
 
     def create(self, validated_data):
       validated_data['password'] = make_password(validated_data.get('password'))
