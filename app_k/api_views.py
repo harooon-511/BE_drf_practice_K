@@ -7,8 +7,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
-import requests
+# import requests
 import json
+from django.dispatch import receiver
    
 
 class ObtainTokenPairWithColorView(TokenObtainPairView):
@@ -72,6 +73,7 @@ class NotificationViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id','post',)
     ordering = ('post',)
     permission_classes = [IsAuthenticated]
+    
 
 class FriendlistViewSet(viewsets.ModelViewSet):
     queryset = Friendlist.objects.all()
