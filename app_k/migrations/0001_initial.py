@@ -114,7 +114,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name="Notification",
+            name="NotificationModel",
             fields=[
                 (
                     "id",

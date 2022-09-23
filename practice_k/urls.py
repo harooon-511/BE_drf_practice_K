@@ -7,6 +7,9 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet, FCMDeviceViewSet
+
+
 
 from django.conf import settings
 from django.conf.urls.static import static
@@ -24,6 +27,8 @@ router.register('post_jsonreceiver', app_k_api_views.PostReceiverViewSet)
 router.register('post_jsonDeleteReceiver', app_k_api_views.PostReceiverViewSet)
 router.register('user_jsonreceiver', app_k_api_views.UserReceiverViewSet)
 router.register('friendlist_jsonreceiver', app_k_api_views.FriendlistReceiverViewSet)
+router.register('devices', FCMDeviceViewSet)
+
 
 
 urlpatterns = [
@@ -31,6 +36,8 @@ urlpatterns = [
     # api/auth/jwt/createでtoken発行できる
     path('api/auth/', include('djoser.urls.jwt')),
     path('api/', include(router.urls)),
+    # path('api/jwt_create/', app_k_api_views.ObtainTokenPairWithColorView.as_view()),
+    path('api/jwt_create/', TokenObtainPairView.as_view()),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -8,7 +8,6 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, Permis
 from django.utils import timezone
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.db.models.signals import post_save
 
 
 from django.core.validators import MinLengthValidator, RegexValidator
@@ -80,7 +79,7 @@ class Post(models.Model):
     db_table = 'Posts'
 
 
-class Notification(models.Model):
+class NotificationModel(models.Model):
   post = models.OneToOneField(Post, verbose_name='ポスト', default=0, on_delete=models.SET_NULL, null=True, related_name='which_post')
 
             
@@ -90,8 +89,9 @@ class Notification(models.Model):
 @receiver(post_save, sender=Post)
 def save_notification(sender, instance, created, **kwargs):
     if created:
-        Notification.objects.create(post=instance)
+        NotificationModel.objects.create(post=instance)
         print('saved!')
+        
         
 
 class Friendlist(models.Model):
@@ -105,3 +105,4 @@ class Friendlist(models.Model):
 
   class Meta:
     db_table = 'Friendlists'
+    

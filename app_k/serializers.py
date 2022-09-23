@@ -43,7 +43,7 @@ class PostSerializer(serializers.ModelSerializer):
 
 class NotificationSerializer(serializers.ModelSerializer):
   class Meta:
-    model = Notification
+    model = NotificationModel
     fields = ('post',)
     
 class FriendlistSerializer(serializers.ModelSerializer):

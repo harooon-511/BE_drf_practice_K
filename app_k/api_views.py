@@ -1,19 +1,26 @@
 from urllib import request
 from app_k.serializers import *
 from app_k.models import *
-from rest_framework import viewsets, filters
+from rest_framework import viewsets, filters, status
 from .serializers import MyTokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+TokenObtainPairSerializer
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
-# import requests
+# firebase
+from firebase_admin.messaging import Message, Notification
+from fcm_django.models import FCMDevice
+
 import json
-from django.dispatch import receiver
-   
+
+
+# class MessagingViewSet(viewsets.ViewSet):
+    
+    
 
 class ObtainTokenPairWithColorView(TokenObtainPairView):
-    serializer_class = MyTokenObtainPairSerializer
+    # serializer_class = MyTokenObtainPairSerializer
 
     def get(self, request, format=None):
         users = CustomUser.objects.all()
@@ -22,12 +29,16 @@ class ObtainTokenPairWithColorView(TokenObtainPairView):
 
     def post(self, request, format=None):
         self.http_method_names.append("GET")
+        print(request.data["username"])
+        print(TokenObtainPairSerializer.username_field)
 
-        serializer = MyTokenObtainPairSerializer(data=request.data)
+        serializer = TokenObtainPairSerializer(data=request.data)
         if serializer.is_valid():
+            print("valid")
             serializer.save()
-            return Response(serializer.data, status= status.HTTP_201_CREATED)
-        return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+        #     return Response(serializer.data, status= status.HTTP_201_CREATED)
+        # return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
+        return Response("", status= status.HTTP_400_BAD_REQUEST)
 
     
 
@@ -63,11 +74,20 @@ class PostViewSet(viewsets.ModelViewSet):
     ordering_fields = ('id','created_at',)
     ordering = ('created_at',)
     permission_classes = [IsAuthenticated]
-
     
+    def create(self, request):
+        serializer = PostSerializer(data=request.data)
+        print("serialize")
+        if serializer.is_valid():
+            serializer.save()
+            
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class NotificationViewSet(viewsets.ModelViewSet):
-    queryset = Notification.objects.all()
+    queryset = NotificationModel.objects.all()
     serializer_class = NotificationSerializer
     filter_backends = (filters.OrderingFilter,)
     ordering_fields = ('id','post',)
@@ -86,6 +106,32 @@ class FriendlistViewSet(viewsets.ModelViewSet):
 class PostReceiverViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    
+    def create(self, request):
+        serializer = PostSerializer(data=request.data)
+
+        if serializer.is_valid():
+            print(FCMDevice.objects.all())
+            device = FCMDevice.objects.all().first()
+            FCMDevice.send_topic_message(
+            # Message(
+            # data={
+            #     "Nick" : "Mario",
+            #     "body" : "great match!",
+            #     "Room" : "PortugalVSDenmark"
+            # },
+            # topic="Optional topic parameter: Whatever you want",
+            # )
+            Message(
+                notification=Notification(title="新規投稿", body="新規投稿が作成されました"),
+            ),
+            "PostCreated"
+            )
+            print("create")
+           
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, format=None):
         queryset = Post.objects.all().filter(id=json.loads(request.body)['id'])

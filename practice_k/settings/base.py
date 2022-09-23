@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 from re import template
+from firebase_admin import initialize_app
 
 import dj_database_url
 import datetime
@@ -19,9 +20,10 @@ DEBUG = strtobool(os.getenv("DEBUG", "n"))
 
 
 
-# ALLOWED_HOSTS = [s.strip() for s in os.getenv("ALLOWED_HOSTS", "").split(",") if s]
+ALLOWED_HOSTS = [s.strip() for s in os.getenv("ALLOWED_HOSTS", "").split(",") if s]
 # IOS実機限定やから後で修正しなあかん
-ALLOWED_HOSTS = ['192.168.13.3','127.0.0.1','192.168.1.249']
+# ALLOWED_HOSTS = ['192.168.1.145','127.0.0.1','192.168.1.123','10.0.2.2']
+
 
 CORS_ALLOWED_ORIGINS = [s.strip() for s in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",") if s]
 
@@ -69,7 +71,17 @@ INSTALLED_APPS = [
     "app_k",
     "rest_framework.authtoken",
     "djoser",
+    "fcm_django",
 ]
+
+FIREBASE_APP = initialize_app()
+
+FCM_DJANGO_SETTINGS = {
+    "APP_VERBOSE_NAME": "practice_kyosera",
+    "ONE_DEVICE_PER_USER": False,
+    "DELETE_INACTIVE_DEVICES": False,
+    "UPDATE_ON_DUPLICATE_REG_ID": True,
+}
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",

@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
-from .models import CustomUser,Post,Notification,Friendlist
+from .models import *
 
 class CustomUserAdmin(UserAdmin):
     fieldsets = (
@@ -39,7 +39,7 @@ CustomUser = get_user_model()
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Post)
-admin.site.register(Notification)
+admin.site.register(NotificationModel)
 admin.site.register(Friendlist)
 
 # Register your models here.
