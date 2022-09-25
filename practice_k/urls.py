@@ -3,10 +3,7 @@ from rest_framework import routers
 from app_k import api_views as app_k_api_views
 from rest_framework.authtoken import views
 # from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token, refresh_jwt_token
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
+from rest_framework_simplejwt.views import TokenObtainPairView
 from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet, FCMDeviceViewSet
 
 

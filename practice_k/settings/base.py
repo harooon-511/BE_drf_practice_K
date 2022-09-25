@@ -20,9 +20,9 @@ DEBUG = strtobool(os.getenv("DEBUG", "n"))
 
 
 
-ALLOWED_HOSTS = [s.strip() for s in os.getenv("ALLOWED_HOSTS", "").split(",") if s]
+# ALLOWED_HOSTS = [s.strip() for s in os.getenv("ALLOWED_HOSTS", "").split(",") if s]
 # IOS実機限定やから後で修正しなあかん
-# ALLOWED_HOSTS = ['192.168.1.145','127.0.0.1','192.168.1.123','10.0.2.2']
+ALLOWED_HOSTS = ['192.168.1.145','127.0.0.1','192.168.1.186','10.0.2.2']
 
 
 CORS_ALLOWED_ORIGINS = [s.strip() for s in os.getenv("CORS_ALLOWED_ORIGINS", "").split(",") if s]

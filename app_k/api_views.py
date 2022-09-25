@@ -15,33 +15,6 @@ from fcm_django.models import FCMDevice
 import json
 
 
-# class MessagingViewSet(viewsets.ViewSet):
-    
-    
-
-class ObtainTokenPairWithColorView(TokenObtainPairView):
-    # serializer_class = MyTokenObtainPairSerializer
-
-    def get(self, request, format=None):
-        users = CustomUser.objects.all()
-        serializer = MyTokenObtainPairSerializer(users, many=True)
-        return Response(serializer.data)
-
-    def post(self, request, format=None):
-        self.http_method_names.append("GET")
-        print(request.data["username"])
-        print(TokenObtainPairSerializer.username_field)
-
-        serializer = TokenObtainPairSerializer(data=request.data)
-        if serializer.is_valid():
-            print("valid")
-            serializer.save()
-        #     return Response(serializer.data, status= status.HTTP_201_CREATED)
-        # return Response(serializer.errors, status= status.HTTP_400_BAD_REQUEST)
-        return Response("", status= status.HTTP_400_BAD_REQUEST)
-
-    
-
 class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
@@ -111,9 +84,11 @@ class PostReceiverViewSet(viewsets.ModelViewSet):
         serializer = PostSerializer(data=request.data)
 
         if serializer.is_valid():
-            print(FCMDevice.objects.all())
-            device = FCMDevice.objects.all().first()
+            serializer.save()
             FCMDevice.send_topic_message(
+            Message(
+                notification=Notification(title="新規投稿", body="新規投稿が作成されました"),
+            ),
             # Message(
             # data={
             #     "Nick" : "Mario",
@@ -122,9 +97,6 @@ class PostReceiverViewSet(viewsets.ModelViewSet):
             # },
             # topic="Optional topic parameter: Whatever you want",
             # )
-            Message(
-                notification=Notification(title="新規投稿", body="新規投稿が作成されました"),
-            ),
             "PostCreated"
             )
             print("create")
